@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: railswelcomepage
+  labels:
+    app: rails
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: rails
+  template:
+    metadata:
+      labels:
+        app: rails
+    spec:
+      containers:
+        - name: railspagecontainer
+          image: 'bhuvanprasad/rails-default-page:v30'
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 3000
+          resources:
+            requests:
+              memory: 64Mi
+              cpu: 250m
+            limits:
+              memory: 128Mi
+              cpu: 500m
+          readinessProbe:
+            tcpSocket:
+              port: 3000
+            initialDelaySeconds: 300
+            periodSeconds: 50
+          livenessProbe:
+            tcpSocket:
+              port: 3000
+            initialDelaySeconds: 15
+            periodSeconds: 20
+
